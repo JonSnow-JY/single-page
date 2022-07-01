@@ -1,0 +1,11 @@
+@import "./var.scss";
+
+// 固定这样写
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+@import "~element-ui/packages/theme-chalk/src/index";
+
+@import "./scrollbar.scss";
+@import "./pagination.scss";
+@import "./table.scss";
+@import "./dialog.scss";
+@import "./form.scss";

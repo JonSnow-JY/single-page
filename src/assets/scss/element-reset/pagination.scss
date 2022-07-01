@@ -1,0 +1,30 @@
+.el-pagination {
+  margin: 30px auto 0;
+  text-align: center;
+}
+.el-pager {
+  border-radius: 30px;
+}
+.el-pagination.is-background {
+  .btn-next,
+  .btn-prev,
+  .el-pager li {
+    transition: all 0.25s ease;
+  }
+}
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
+  border-radius: 50%;
+  margin: 0 2px;
+  min-width: 36px;
+  height: 36px;
+  line-height: 36px;
+}
+.el-pagination.is-background .btn-next.disabled,
+.el-pagination.is-background .btn-next:disabled,
+.el-pagination.is-background .btn-prev.disabled,
+.el-pagination.is-background .btn-prev:disabled,
+.el-pagination.is-background .el-pager li.disabled {
+  opacity: 0.4;
+}
