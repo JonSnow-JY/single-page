@@ -1,6 +1,6 @@
 // 注册全局组件
 import Vue from "vue";
 
-import FooterPage from "./footer-page";
+import CountUp from "./count-up";
 
-Vue.component("FooterPage", FooterPage);
+Vue.component("CountUp", CountUp);

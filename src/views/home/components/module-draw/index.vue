@@ -9,7 +9,7 @@
   >
     <div class="table-wrap">
       <el-scrollbar style="height: 100%">
-        <div class="plr20 pt10 pb20">
+        <div class="plr20 pt10 pb10">
           <el-table v-if="dialogVisible" :data="tableData" border>
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column prop="alias" label="模块名" />
