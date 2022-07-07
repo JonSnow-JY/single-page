@@ -27,7 +27,7 @@ export default {
      * 初始化
      */
     doInit() {
-      const myChart = echarts.init(this.$refs.main);
+      this.myChart = echarts.init(this.$refs.main);
       const option = {
         xAxis: {
           type: "category",
@@ -44,7 +44,13 @@ export default {
           },
         ],
       };
-      myChart.setOption(option);
+      this.myChart.setOption(option);
+    },
+    /**
+     * 重置
+     */
+    doResize() {
+      this.myChart.resize();
     },
   },
 };

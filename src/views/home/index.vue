@@ -45,7 +45,7 @@
               :w="item.w"
               :h="item.h"
               :i="item.i"
-              @resize="resizeHandler"
+              @resize="() => resizeHandler(item, index)"
               @move="moveHandler"
               @resized="resizedHandler"
               @moved="movedHandler"
@@ -57,7 +57,10 @@
                 <div slot="header">{{ item.alias }}</div>
 
                 <num-card v-if="item.type === 'NumCard'" />
-                <echart-line v-if="item.type === 'EchartLine'" />
+                <echart-line
+                  v-if="item.type === 'EchartLine'"
+                  :ref="`echart${index}`"
+                />
               </el-card>
             </grid-item>
           </grid-layout>
@@ -155,17 +158,25 @@ export default {
       });
       console.groupEnd();
     },
-    resizeHandler(i, newH, newW) {
-      this.log("resizeHandler", `i: ${i}, newH: ${newH}, newW: ${newW}`);
+    resizeHandler(item, index) {
+      // this.log("resizeHandler", `i: ${i}, newH: ${newH}, newW: ${newW}`);
+      console.log(index);
+      console.log(JSON.stringify(item, null, 4));
+      const { type } = item;
+      if (type === "EchartLine") {
+        console.log(this.$refs[`echart${index}`]);
+        this.$refs[`echart${index}`][0].doResize();
+      }
     },
     moveHandler(i, newX, newY) {
       this.log("moveHandler", `i: ${i}, newX: ${newX}, newY: ${newY}`);
     },
-    resizedHandler(i, newH, newW, newHPx, newWPx) {
-      this.log(
-        "resizedHandler",
-        `i: ${i}, newH: ${newH}, newW: ${newW}, newHPx: ${newHPx}, newWPx: ${newWPx}`
-      );
+    resizedHandler() {
+      // this.log(
+      //   "resizedHandler",
+      //   `i: ${i}, newH: ${newH}, newW: ${newW}, newHPx: ${newHPx}, newWPx: ${newWPx}`
+      // );
+      console.log(1111);
     },
     movedHandler(i, newX, newY) {
       this.log("movedHandler", `i: ${i}, newX: ${newX}, newY: ${newY}`);
