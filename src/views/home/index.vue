@@ -4,7 +4,12 @@
       <el-button type="primary" class="ml8" plain>调整布局</el-button>
       <el-button type="primary" plain @click="moduleSelect">选择模块</el-button>
     </div>
-    <grid-layout v-bind="layout" @layout-updated="layoutUpdatedHandler">
+
+    <div v-if="!layout.layout.length" class="empty-wrap fcc">
+      <el-empty description="请添加模块" />
+    </div>
+
+    <grid-layout v-else v-bind="layout" @layout-updated="layoutUpdatedHandler">
       <grid-item
         v-for="(item, index) in layout.layout"
         :key="index"
@@ -27,13 +32,16 @@
       </grid-item>
     </grid-layout>
 
-    <module-draw :dialogVisible.sync="moduleDrawVisible" />
+    <module-draw
+      :dialogVisible.sync="moduleDrawVisible"
+      @success="moduleSuccess"
+    />
   </div>
 </template>
 
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout";
-import { getLayout, addLayout } from "api/agent";
+// import { getLayout, addLayout } from "api/agent";
 import ModuleDraw from "./components/module-draw";
 
 export default {
@@ -46,14 +54,14 @@ export default {
       moduleDrawVisible: false,
       layout: {
         layout: [
-          { x: 0, y: 0, w: 4, h: 10, i: "0" },
-          { x: 4, y: 0, w: 2, h: 5, i: "1" },
-          { x: 6, y: 0, w: 4, h: 5, i: "2" },
-          { x: 10, y: 0, w: 2, h: 10, i: "3" },
-          { x: 4, y: 5, w: 4, h: 5, i: "4" },
-          { x: 8, y: 5, w: 2, h: 5, i: "5" },
-          { x: 0, y: 10, w: 8, h: 5, i: "6" },
-          { x: 8, y: 10, w: 4, h: 5, i: "7" },
+          // { x: 0, y: 0, w: 4, h: 10, i: "0" },
+          // { x: 4, y: 0, w: 2, h: 5, i: "1" },
+          // { x: 6, y: 0, w: 4, h: 5, i: "2" },
+          // { x: 10, y: 0, w: 2, h: 10, i: "3" },
+          // { x: 4, y: 5, w: 4, h: 5, i: "4" },
+          // { x: 8, y: 5, w: 2, h: 5, i: "5" },
+          // { x: 0, y: 10, w: 8, h: 5, i: "6" },
+          // { x: 8, y: 10, w: 4, h: 5, i: "7" },
         ],
         colNum: 12,
         rowHeight: 30,
@@ -68,35 +76,34 @@ export default {
   },
   computed: {},
   watch: {},
-  async created() {
-    await getLayout();
+  created() {
+    // await getLayout();
   },
   mounted() {
     // 加载完成后显示提示
-    this.showInfo();
-    this.submitData();
+    // this.showInfo();
+    // this.submitData();
   },
   methods: {
     log(arg1 = "log", ...logs) {
       if (logs.length === 0) {
         console.log(arg1);
       } else {
-        console.group(arg1);
         logs.forEach((e) => {
           console.log(e);
         });
         console.groupEnd();
       }
     },
-    async submitData() {
-      await addLayout({
-        layouts: [
-          { alias: "aaa", layout: "aaa" },
-          { alias: "bbb", layout: "bbb" },
-          { alias: "ccc", layout: "ccc" },
-        ],
-      });
-    },
+    // async submitData() {
+    //   await addLayout({
+    //     layouts: [
+    //       { alias: "aaa", layout: "aaa" },
+    //       { alias: "bbb", layout: "bbb" },
+    //       { alias: "ccc", layout: "ccc" },
+    //     ],
+    //   });
+    // },
     // 显示提示
     showInfo() {
       // this.$notify({
@@ -136,6 +143,18 @@ export default {
     moduleSelect() {
       this.moduleDrawVisible = true;
     },
+    /**
+     * 模块选择回调
+     */
+    moduleSuccess(val) {
+      this.setLayoutData(val);
+    },
+    /**
+     * 设置布局数据
+     */
+    setLayoutData(list) {
+      console.log(JSON.stringify(list, null, 4));
+    },
   },
 };
 </script>
@@ -164,5 +183,9 @@ export default {
   .header {
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
+}
+
+.empty-wrap {
+  height: calc(100vh - 50px);
 }
 </style>

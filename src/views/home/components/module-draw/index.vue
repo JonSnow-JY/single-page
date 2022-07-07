@@ -10,16 +10,34 @@
     <div class="table-wrap">
       <el-scrollbar style="height: 100%">
         <div class="plr20 pt10 pb10">
-          <el-table v-if="dialogVisible" :data="tableData" border>
+          <el-table
+            v-if="dialogVisible"
+            :data="tableData"
+            border
+            @selection-change="handleSelectionChange"
+          >
             <el-table-column type="selection" width="55" align="center" />
+            <el-table-column
+              type="index"
+              width="55"
+              align="center"
+              label="序号"
+            />
             <el-table-column prop="alias" label="模块名" />
             <el-table-column prop="style_text" label="样式" />
           </el-table>
         </div>
       </el-scrollbar>
     </div>
+
     <div class="mt20 pr20" flex="dir:right">
-      <el-button type="primary" class="ml10">确定</el-button>
+      <el-button
+        type="primary"
+        class="ml10"
+        :disabled="!checkedData.length"
+        @click="doSubmit"
+        >确定</el-button
+      >
       <el-button @click="close">取消</el-button>
     </div>
   </el-drawer>
@@ -37,6 +55,7 @@ export default {
   data() {
     return {
       tableData,
+      checkedData: [],
     };
   },
   computed: {},
@@ -51,13 +70,19 @@ export default {
     /**
      * 提交
      */
-    async submitData() {
+    async doSubmit() {
       try {
-        this.$emit("success", this.selectedItemObj);
+        this.$emit("success", this.checkedData);
         this.close();
       } catch (e) {
         console.log(e);
       }
+    },
+    /**
+     * 模块选择
+     */
+    handleSelectionChange(val) {
+      this.checkedData = val;
     },
     /**
      * 列表数据格式化
