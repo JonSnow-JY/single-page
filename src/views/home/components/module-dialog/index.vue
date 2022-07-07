@@ -58,40 +58,6 @@ export default {
       }
     },
     /**
-     * 计划选择
-     */
-    handleItemCodeChange(item) {
-      // 关闭弹窗，item值为null，故做兼容
-      if (!item) return;
-      const { jcnr_1, qtbm_2, xtbm_3, zhqj_4, xcbz_7, id } = item;
-      this.id = id;
-      // 设置选中数据对象
-      this.selectedItemObj = {
-        jcnr_1,
-        qtbm_2,
-        xtbm_3: xtbm_3 ? xtbm_3.split(",") : [],
-        zhrq_6: zhqj_4,
-        xcbz_7,
-        id_4: id,
-      };
-    },
-    /**
-     * 额外的搜索参数
-     */
-    searchObjFormat() {
-      return {
-        itemCode: "330300000030",
-        queryParams: JSON.stringify([
-          {
-            // 获取未执行的数据
-            name: "jczt_6",
-            value: "1",
-            eq: "1",
-          },
-        ]),
-      };
-    },
-    /**
      * 列表数据格式化
      */
     tableDataFormat() {
@@ -100,3 +66,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .el-dialog__body {
+  padding: 10px 20px;
+}
+</style>
