@@ -27,6 +27,7 @@
 
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout";
+import { getLayout, addLayout } from "api/agent";
 
 export default {
   name: "HomeCom",
@@ -52,17 +53,20 @@ export default {
         isResizable: true,
         isMirrored: false,
         verticalCompact: true,
-        margin: [10, 10],
+        margin: [10, 11],
         useCssTransforms: true,
       },
     };
   },
   computed: {},
   watch: {},
-  created() {},
+  async created() {
+    await getLayout();
+  },
   mounted() {
     // 加载完成后显示提示
     this.showInfo();
+    this.submitData();
   },
   methods: {
     log(arg1 = "log", ...logs) {
@@ -75,6 +79,9 @@ export default {
         });
         console.groupEnd();
       }
+    },
+    async submitData() {
+      await addLayout({ alias: "aaa", layout: "aaa", status: 1, style: 1 });
     },
     // 显示提示
     showInfo() {
