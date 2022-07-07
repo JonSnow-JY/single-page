@@ -31,16 +31,33 @@ export default {
       const option = {
         xAxis: {
           type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: [
+            "2022-01",
+            "2022-02",
+            "2022-03",
+            "2022-04",
+            "2022-05",
+            "2022-06",
+            "2022-07",
+          ],
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        grid: {
+          top: "5%",
+          right: "5%",
+          bottom: "8%",
         },
         yAxis: {
           type: "value",
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: [320, 450, 901, 934, 1100, 1330, 1680],
             type: "line",
             smooth: true,
+            symbol: "circle",
           },
         ],
       };
@@ -49,7 +66,8 @@ export default {
     /**
      * 重置
      */
-    doResize() {
+    async doResize() {
+      await this.$nextTick();
       this.myChart.resize();
     },
   },

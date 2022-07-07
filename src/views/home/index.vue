@@ -9,7 +9,7 @@
         <el-row :gutter="10">
           <el-col v-for="(item, index) in tableData" :key="index" :span="12">
             <div
-              class="item lh20 r4 p10 ftcc mtb5 pointer"
+              class="item lh20 r4 p10 ftcc mtb5 pointer fz13"
               draggable="true"
               unselectable="on"
               @drag="drag"
@@ -51,10 +51,10 @@
               @moved="movedHandler"
             >
               <el-card shadow="never" class="page_card" style="height: 100%">
-                <!-- <el-tag size="mini" type="info" slot="header"
-                  >Card {{ item.i }}</el-tag
-                > -->
-                <div slot="header">{{ item.alias }}</div>
+                <div slot="header" class="fz14 fb fbc">
+                  <span>{{ item.alias }}</span>
+                  <!-- <i class="el-icon-delete pointer" @click="doDel(item.id)"></i> -->
+                </div>
 
                 <num-card v-if="item.type === 'NumCard'" />
                 <echart-line
@@ -76,6 +76,7 @@ import { GridLayout, GridItem } from "vue-grid-layout";
 import tableData from "./config";
 import NumCard from "./components/modules/num-card";
 import EchartLine from "./components/modules/echart-line";
+import { v4 as uuid } from "uuid";
 
 let mouseXY = { x: null, y: null };
 let DragPos = { x: null, y: null, w: 1, h: 1, i: null };
@@ -276,7 +277,6 @@ export default {
      * 拖拽结束
      */
     dragend(item) {
-      console.log(JSON.stringify(item, null, 4));
       let parentRect = document
         .getElementById("content")
         .getBoundingClientRect();
@@ -308,6 +308,7 @@ export default {
           i: DragPos.i,
           type,
           alias,
+          id: uuid(),
         });
         this.$refs.gridlayout.dragEvent(
           "dragend",
@@ -325,6 +326,14 @@ export default {
           console.log(e);
         }
       }
+    },
+    /**
+     * 单个删除
+     */
+    doDel(val) {
+      console.log(JSON.stringify(this.layout, null, 4));
+      console.log(val);
+      this.layout = this.layout.filter((item) => item.id !== val);
     },
   },
 };
@@ -352,7 +361,8 @@ $boxShadow: 0px 2px 10px -4px rgba(122, 149, 164, 0.5);
 }
 
 ::v-deep .el-card__body {
-  height: 100%;
+  height: calc(100% - 51px);
+  padding: 10px;
 }
 
 .wrapper {
@@ -393,7 +403,7 @@ $boxShadow: 0px 2px 10px -4px rgba(122, 149, 164, 0.5);
       bottom: 0;
     }
     #content {
-      height: calc(100vh - 50px);
+      min-height: calc(100vh - 50px);
     }
   }
 }
