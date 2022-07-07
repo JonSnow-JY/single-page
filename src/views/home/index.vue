@@ -21,11 +21,10 @@
         </el-row>
       </div>
       <div class="right" flex-box="1">
-        <!-- <div v-if="!layout.layout.length" class="empty-wrap fcc">
+        <div v-if="!layout.length" class="empty-wrap fcc">
           <el-empty description="请从左侧拖拽添加模块" />
-        </div> -->
+        </div>
 
-        <!-- <div v-else id="content"> -->
         <div id="content">
           <grid-layout
             ref="gridlayout"
@@ -336,10 +335,6 @@ $boxShadow: 0px 2px 10px -4px rgba(122, 149, 164, 0.5);
   }
 }
 
-.empty-wrap {
-  height: calc(100vh - 50px);
-}
-
 .content {
   .left {
     width: 300px;
@@ -362,6 +357,15 @@ $boxShadow: 0px 2px 10px -4px rgba(122, 149, 164, 0.5);
     height: calc(100vh - 50px);
     overflow: auto;
     overflow-x: hidden;
+    position: relative;
+    .empty-wrap {
+      height: calc(100vh - 50px);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
     #content {
       height: calc(100vh - 50px);
     }
