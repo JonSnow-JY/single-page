@@ -27,23 +27,23 @@
       </grid-item>
     </grid-layout>
 
-    <module-dialog :dialogVisible.sync="moduleDialogVisible" />
+    <module-draw :dialogVisible.sync="moduleDrawVisible" />
   </div>
 </template>
 
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout";
 import { getLayout, addLayout } from "api/agent";
-import ModuleDialog from "./components/module-dialog";
+import ModuleDraw from "./components/module-draw";
 
 export default {
   name: "HomeCom",
-  components: { GridLayout, GridItem, ModuleDialog },
+  components: { GridLayout, GridItem, ModuleDraw },
   mixins: [],
   props: {},
   data() {
     return {
-      moduleDialogVisible: false,
+      moduleDrawVisible: false,
       layout: {
         layout: [
           { x: 0, y: 0, w: 4, h: 10, i: "0" },
@@ -134,7 +134,7 @@ export default {
      * 选择模块
      */
     moduleSelect() {
-      this.moduleDialogVisible = true;
+      this.moduleDrawVisible = true;
     },
   },
 };
