@@ -2,7 +2,6 @@
   <div class="wrapper">
     <div class="header ptb8 pr10 bgf" flex="dir:right">
       <el-button type="primary" class="ml8" plain>调整布局</el-button>
-      <el-button type="primary" plain>选择模块</el-button>
     </div>
 
     <div class="content" flex>
