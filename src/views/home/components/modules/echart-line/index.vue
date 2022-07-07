@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="">
-    <div ref="main" class="wh100"></div>
+  <div style="height: 100%">
+    <div ref="main" class="full echart-wrap" style="height: 100%"></div>
   </div>
 </template>
 
@@ -50,4 +50,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.echart-wrap {
+}
+</style>

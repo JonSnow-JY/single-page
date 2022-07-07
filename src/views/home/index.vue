@@ -13,7 +13,7 @@
               draggable="true"
               unselectable="on"
               @drag="drag"
-              @dragend="dragend"
+              @dragend="() => dragend(item)"
             >
               {{ item.alias }}
             </div>
@@ -51,14 +51,13 @@
               @moved="movedHandler"
             >
               <el-card shadow="never" class="page_card" style="height: 100%">
-                <el-tag size="mini" type="info" slot="header"
+                <!-- <el-tag size="mini" type="info" slot="header"
                   >Card {{ item.i }}</el-tag
-                >
-                <template v-if="item.i === '0'">
-                  <div class="mb20">拖拽卡片调整位置</div>
-                  <div class="mb20">拖拽卡片右下角的手柄调整卡片大小</div>
-                  <div class="mb20">在控制台打印出数据变化</div>
-                </template>
+                > -->
+                <div slot="header">{{ item.alias }}</div>
+
+                <num-card v-if="item.type === 'NumCard'" />
+                <echart-line v-if="item.type === 'EchartLine'" />
               </el-card>
             </grid-item>
           </grid-layout>
@@ -72,13 +71,15 @@
 import { GridLayout, GridItem } from "vue-grid-layout";
 // import { getLayout, addLayout } from "api/agent";
 import tableData from "./config";
+import NumCard from "./components/modules/num-card";
+import EchartLine from "./components/modules/echart-line";
 
 let mouseXY = { x: null, y: null };
 let DragPos = { x: null, y: null, w: 1, h: 1, i: null };
 
 export default {
   name: "HomeCom",
-  components: { GridLayout, GridItem },
+  components: { GridLayout, GridItem, NumCard, EchartLine },
   mixins: [],
   props: {},
   data() {
@@ -95,31 +96,12 @@ export default {
         // { x: 0, y: 10, w: 8, h: 5, i: "6" },
         // { x: 8, y: 10, w: 4, h: 5, i: "7" },
       ],
-      // layout: {
-      //   layout: [
-      //     // { x: 0, y: 0, w: 4, h: 10, i: "0" },
-      //     // { x: 4, y: 0, w: 2, h: 5, i: "1" },
-      //     // { x: 6, y: 0, w: 4, h: 5, i: "2" },
-      //     // { x: 10, y: 0, w: 2, h: 10, i: "3" },
-      //     // { x: 4, y: 5, w: 4, h: 5, i: "4" },
-      //     // { x: 8, y: 5, w: 2, h: 5, i: "5" },
-      //     // { x: 0, y: 10, w: 8, h: 5, i: "6" },
-      //     // { x: 8, y: 10, w: 4, h: 5, i: "7" },
-      //   ],
-      //   colNum: 12,
-      //   rowHeight: 30,
-      //   isDraggable: true,
-      //   isResizable: true,
-      //   isMirrored: false,
-      //   verticalCompact: true,
-      //   margin: [10, 11],
-      //   useCssTransforms: true,
-      // },
     };
   },
   computed: {},
   watch: {},
   created() {
+    this.tableDataFormat();
     // await getLayout();
   },
   mounted() {
@@ -188,6 +170,28 @@ export default {
     movedHandler(i, newX, newY) {
       this.log("movedHandler", `i: ${i}, newX: ${newX}, newY: ${newY}`);
     },
+    /**
+     * 列表数据格式化
+     */
+    tableDataFormat() {
+      this.tableData.map((item) => {
+        const { name, style } = item;
+        let tempObj = {};
+        if (name === "clue") {
+          tempObj = { w: 6, h: 8, type: "EchartLine" };
+        } else {
+          if (style === 1) {
+            tempObj = { w: 3, h: 4, type: "NumCard" };
+          } else {
+            tempObj = { w: 6, h: 8, type: "EchartLine" };
+          }
+        }
+        Object.assign(item, tempObj);
+      });
+    },
+    /**
+     * 开始拖拽
+     */
     drag() {
       let parentRect = document
         .getElementById("content")
@@ -206,10 +210,10 @@ export default {
         this.layout.findIndex((item) => item.i === "drop") === -1
       ) {
         this.layout.push({
-          x: (this.layout.length * 2) % (this.colNum || 12),
+          x: 0,
           y: 0,
-          w: 4,
-          h: 10,
+          w: 1,
+          h: 1,
           i: "drop",
         });
       }
@@ -257,7 +261,11 @@ export default {
         }
       }
     },
-    dragend() {
+    /**
+     * 拖拽结束
+     */
+    dragend(item) {
+      console.log(JSON.stringify(item, null, 4));
       let parentRect = document
         .getElementById("content")
         .getBoundingClientRect();
@@ -280,12 +288,15 @@ export default {
           1
         );
         this.layout = this.layout.filter((obj) => obj.i !== "drop");
+        const { w, h, type, alias } = item;
         this.layout.push({
           x: DragPos.x,
           y: DragPos.y,
-          w: 4,
-          h: 10,
+          w,
+          h,
           i: DragPos.i,
+          type,
+          alias,
         });
         this.$refs.gridlayout.dragEvent(
           "dragend",
@@ -327,6 +338,10 @@ $boxShadow: 0px 2px 10px -4px rgba(122, 149, 164, 0.5);
       }
     }
   }
+}
+
+::v-deep .el-card__body {
+  height: 100%;
 }
 
 .wrapper {

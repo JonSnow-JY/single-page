@@ -1,5 +1,7 @@
 <template lang="html">
-  <div class="">121212</div>
+  <div class="">
+    <count-up :end="endNum" :duration="4" />
+  </div>
 </template>
 
 <script>
@@ -11,7 +13,11 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    endNum() {
+      return parseInt(Math.random() * 1000);
+    },
+  },
   watch: {},
   created() {},
   mounted() {},
