@@ -1,5 +1,9 @@
 <template lang="html">
-  <div>
+  <div class="wrapper">
+    <div class="header ptb8 pr10 bgf" flex="dir:right">
+      <el-button type="primary" class="ml8" plain>调整布局</el-button>
+      <el-button type="primary" plain @click="moduleSelect">选择模块</el-button>
+    </div>
     <grid-layout v-bind="layout" @layout-updated="layoutUpdatedHandler">
       <grid-item
         v-for="(item, index) in layout.layout"
@@ -22,20 +26,24 @@
         </el-card>
       </grid-item>
     </grid-layout>
+
+    <module-dialog :dialogVisible.sync="moduleDialogVisible" />
   </div>
 </template>
 
 <script>
 import { GridLayout, GridItem } from "vue-grid-layout";
 import { getLayout, addLayout } from "api/agent";
+import ModuleDialog from "./components/module-dialog";
 
 export default {
   name: "HomeCom",
-  components: { GridLayout, GridItem },
+  components: { GridLayout, GridItem, ModuleDialog },
   mixins: [],
   props: {},
   data() {
     return {
+      moduleDialogVisible: false,
       layout: {
         layout: [
           { x: 0, y: 0, w: 4, h: 10, i: "0" },
@@ -81,15 +89,21 @@ export default {
       }
     },
     async submitData() {
-      await addLayout({ alias: "aaa", layout: "aaa", status: 1, style: 1 });
+      await addLayout({
+        layouts: [
+          { alias: "aaa", layout: "aaa" },
+          { alias: "bbb", layout: "bbb" },
+          { alias: "ccc", layout: "ccc" },
+        ],
+      });
     },
     // 显示提示
     showInfo() {
-      this.$notify({
-        title: "提示",
-        message:
-          "你可以按住卡片拖拽改变位置；或者在每个卡片的右下角拖动，调整卡片大小",
-      });
+      // this.$notify({
+      //   title: "提示",
+      //   message:
+      //     "你可以按住卡片拖拽改变位置；或者在每个卡片的右下角拖动，调整卡片大小",
+      // });
     },
     // 测试代码
     layoutUpdatedHandler(newLayout) {
@@ -116,6 +130,12 @@ export default {
     movedHandler(i, newX, newY) {
       this.log("movedHandler", `i: ${i}, newX: ${newX}, newY: ${newY}`);
     },
+    /**
+     * 选择模块
+     */
+    moduleSelect() {
+      this.moduleDialogVisible = true;
+    },
   },
 };
 </script>
@@ -137,6 +157,12 @@ export default {
         opacity: 1;
       }
     }
+  }
+}
+
+.wrapper {
+  .header {
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
 }
 </style>
